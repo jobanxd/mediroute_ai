@@ -3,10 +3,10 @@ import logging
 import json
 from math import radians, sin, cos, sqrt, atan2
 
-from agents.state import AgentState
 from langchain_core.messages import AIMessage
 
-from data.hospitals import HOSPITALS, EMERGENCY_CAPABILITY_MAP
+from app.agents.state import AgentState
+from app.data.hospitals import HOSPITALS, EMERGENCY_CAPABILITY_MAP
 
 logger = logging.getLogger(__name__)
 
@@ -15,12 +15,12 @@ logger = logging.getLogger(__name__)
 
 def _haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     """Calculate distance in km between two coordinates."""
-    R = 6371  # Earth radius in km
+    r = 6371  # Earth radius in km
     lat1, lng1, lat2, lng2 = map(radians, [lat1, lng1, lat2, lng2])
     dlat = lat2 - lat1
     dlng = lng2 - lng1
     a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlng/2)**2
-    return R * 2 * atan2(sqrt(a), sqrt(1 - a))
+    return r * 2 * atan2(sqrt(a), sqrt(1 - a))
 
 
 # ── Geocoding (mock) ──────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ def _get_patient_coordinates(location: str) -> tuple:
             return coords
 
     # Default to Metro Manila center if location not recognized
-    logger.warning(f"Location not recognized: {location} — defaulting to Metro Manila center")
+    logger.warning("Location not recognized: %s - defaulting to Metro Manila center", location)
     return (14.5995, 120.9842)
 
 
@@ -95,29 +95,34 @@ async def match_agent_node(state: AgentState) -> AgentState:
     try:
         intake_data = json.loads(last_message.content)
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse intake data: {e}")
+        logger.error("Failed to parse intake data: %s", e)
         return {
-            "messages": [AIMessage(content=json.dumps({"error": "Failed to parse intake data"}), name="match_agent")],
+            "messages": [
+                AIMessage(
+                    content=json.dumps({"error": "Failed to parse intake data"}),
+                    name="match_agent"
+                )
+            ],
             "next_agent": "response_agent"
         }
 
-    symptoms = intake_data.get("symptoms", "unknown")
     emergency_type = intake_data.get("emergency_type", "GENERAL")
     location = intake_data.get("location", "unknown")
     insurance_provider = intake_data.get("insurance_provider", "unknown")
 
-    logger.info(f"Matching for — Emergency: {emergency_type} | Location: {location} | Insurance: {insurance_provider}")
+    logger.info("Matching for — Emergency: %s | Location: %s | Insurance: %s",
+                emergency_type, location, insurance_provider)
 
     # Get patient coordinates
     patient_lat, patient_lng = _get_patient_coordinates(location)
-    logger.info(f"Patient coordinates: {patient_lat}, {patient_lng}")
+    logger.info("Patient coordinates: %s, %s", patient_lat, patient_lng)
 
     # ── Step 1: Filter by insurance ───────────────────────────────────────────
     insurance_filtered = [
         h for h in HOSPITALS
         if insurance_provider in h["insurance_accepted"]
     ]
-    logger.info(f"Hospitals after insurance filter: {len(insurance_filtered)}")
+    logger.info("Hospitals after insurance filter: %s", len(insurance_filtered))
 
     # ── Step 2: Filter by emergency type support + required capabilities ──────
     capable_hospitals = []
@@ -126,8 +131,7 @@ async def match_agent_node(state: AgentState) -> AgentState:
             required_met, preferred_score = _score_hospital(hospital, emergency_type)
             if required_met:
                 capable_hospitals.append((hospital, preferred_score))
-
-    logger.info(f"Hospitals after capability filter: {len(capable_hospitals)}")
+    logger.info("Hospitals after capability filter: %s", len(capable_hospitals))
 
     # ── Step 3: Calculate distance and rank ───────────────────────────────────
     ranked = []
@@ -153,7 +157,8 @@ async def match_agent_node(state: AgentState) -> AgentState:
         match_result = {
             "intake_data": intake_data,
             "matches": [],
-            "no_match_reason": f"No hospitals found accepting {insurance_provider} with {emergency_type} capabilities."
+            "no_match_reason": (f"No hospitals found accepting {insurance_provider}"
+                                f"with {emergency_type} capabilities. ")
         }
     else:
         match_result = {
@@ -174,7 +179,7 @@ async def match_agent_node(state: AgentState) -> AgentState:
             ]
         }
 
-    logger.info(f"Match result: {json.dumps(match_result, indent=2)}")
+    logger.info("Match result: %s", json.dumps(match_result, indent=2))
 
     return {
         "messages": [AIMessage(content=json.dumps(match_result), name="match_agent")],

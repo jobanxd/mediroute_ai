@@ -2,11 +2,11 @@
 import logging
 import json
 
-from agents.state import AgentState
 from langchain_core.messages import AIMessage
 
-from agents.prompts import intake_agent_prompts as ia_prompts
-from utils.llm_util import call_llm
+from app.agents.state import AgentState
+from app.agents.prompts import intake_agent_prompts as ia_prompts
+from app.utils.llm_util import call_llm
 
 logger = logging.getLogger(__name__)
 
@@ -31,13 +31,13 @@ async def intake_agent_node(state: AgentState) -> AgentState:
         content = msg.content
         messages.append({"role": role, "content": content})
 
-    logger.info(f"Calling LLM with messages: {json.dumps(messages, indent=2)}")
+    logger.info("Calling LLM with messages: %s", json.dumps(messages, indent=2))
 
     response = await call_llm(
         messages=messages,
     )
 
-    logger.info(f"LLM response: {response}")
+    logger.info("LLM response: \n%s", response)
 
     # Parse JSON response
     message = response.choices[0].message
@@ -45,9 +45,9 @@ async def intake_agent_node(state: AgentState) -> AgentState:
 
     try:
         extracted = json.loads(raw_content)
-        logger.info(f"Extracted intake data: {json.dumps(extracted, indent=2)}")
+        logger.info("Extracted intake data: %s", json.dumps(extracted, indent=2))
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse intake JSON: {e} | Raw: {raw_content}")
+        logger.error("Failed to parse intake JSON: %s | Raw: %s", e, raw_content)
         extracted = {
             "symptoms": "unknown",
             "emergency_type": "GENERAL",

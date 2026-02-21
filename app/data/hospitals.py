@@ -4,7 +4,10 @@ HOSPITALS = [
     {
         "id": "H001",
         "name": "St. Luke's Medical Center - BGC",
-        "address": "Rizal Drive cor. 32nd St. and 5th Ave, Bonifacio Global City, Taguig, Metro Manila",
+        "address": (
+            "Rizal Drive cor. 32nd St. and 5th Ave, "
+            "Bonifacio Global City, Taguig, Metro Manila"
+        ),
         "lat": 14.5494,
         "lng": 121.0509,
         "contact": "+63 2 8789 7700",
@@ -20,8 +23,14 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["Maxicare", "AIA Philippines Life", "Insular Life Assurance Company"],
-        "emergency_types_supported": ["CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"]
+        "insurance_accepted": [
+            "Maxicare",
+            "AIA Philippines Life",
+            "Insular Life Assurance Company",
+        ],
+        "emergency_types_supported": [
+            "CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"
+        ]
     },
     {
         "id": "H002",
@@ -42,8 +51,13 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["Maxicare", "AIA Philippines Life"],
-        "emergency_types_supported": ["CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"]
+        "insurance_accepted": [
+            "Maxicare",
+            "AIA Philippines Life",
+        ],
+        "emergency_types_supported": [
+            "CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"
+        ]
     },
     {
         "id": "H003",
@@ -64,8 +78,12 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["Insular Life Assurance Company"],
-        "emergency_types_supported": ["CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "BURNS", "GENERAL"]
+        "insurance_accepted": [
+            "Insular Life Assurance Company",
+        ],
+        "emergency_types_supported": [
+            "CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "BURNS", "GENERAL"
+        ]
     },
     {
         "id": "H004",
@@ -86,8 +104,13 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["Maxicare", "Insular Life Assurance Company"],
-        "emergency_types_supported": ["CARDIAC", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"]
+        "insurance_accepted": [
+            "Maxicare",
+            "Insular Life Assurance Company",
+        ],
+        "emergency_types_supported": [
+            "CARDIAC", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"
+        ]
     },
     {
         "id": "H005",
@@ -108,7 +131,10 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["AIA Philippines Life", "Insular Life Assurance Company"],
+        "insurance_accepted": [
+            "AIA Philippines Life",
+            "Insular Life Assurance Company",
+        ],
         "emergency_types_supported": ["RESPIRATORY", "GENERAL"]
     },
     {
@@ -152,13 +178,19 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["AIA Philippines Life", "Insular Life Assurance Company"],
+        "insurance_accepted": [
+            "AIA Philippines Life",
+            "Insular Life Assurance Company",
+        ],
         "emergency_types_supported": ["TRAUMA", "BURNS", "RESPIRATORY", "GENERAL"]
     },
     {
         "id": "H008",
         "name": "Asian Hospital and Medical Center",
-        "address": "2205 Civic Drive, Filinvest Corporate City, Alabang, Muntinlupa",
+        "address": (
+            "2205 Civic Drive, Filinvest Corporate City, "
+            "Alabang, Muntinlupa"
+        ),
         "lat": 14.4195,
         "lng": 121.0347,
         "contact": "+63 2 8771 9000",
@@ -174,8 +206,13 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["Maxicare", "AIA Philippines Life"],
-        "emergency_types_supported": ["CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"]
+        "insurance_accepted": [
+            "Maxicare",
+            "AIA Philippines Life",
+        ],
+        "emergency_types_supported": [
+            "CARDIAC", "TRAUMA", "NEUROLOGICAL", "RESPIRATORY", "GENERAL"
+        ]
     },
     {
         "id": "H009",
@@ -196,7 +233,9 @@ HOSPITALS = [
             "respiratory_unit": True,
             "emergency_room": True
         },
-        "insurance_accepted": ["Insular Life Assurance Company"],
+        "insurance_accepted": [
+            "Insular Life Assurance Company",
+        ],
         "emergency_types_supported": ["TRAUMA", "BURNS", "RESPIRATORY", "GENERAL"]
     },
     {
@@ -218,7 +257,11 @@ HOSPITALS = [
             "respiratory_unit": False,
             "emergency_room": True
         },
-        "insurance_accepted": ["Maxicare", "AIA Philippines Life", "Insular Life Assurance Company"],
+        "insurance_accepted": [
+            "Maxicare",
+            "AIA Philippines Life",
+            "Insular Life Assurance Company",
+        ],
         "emergency_types_supported": ["CARDIAC", "NEUROLOGICAL", "GENERAL"]
     }
 ]

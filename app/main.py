@@ -1,9 +1,9 @@
 """FastAPI App Entry Point with Logging + Lifespan."""
 import logging
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
 
 from routers.chat_router import router
 
@@ -15,11 +15,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
+async def lifespan(_app: FastAPI):
+    """Application lifespan handler for startup and shutdown events."""
     logger.info("MediRoute AI service started successfully")
     yield
-    # Shutdown
     logger.info("MediRoute AI service shutting down...")
 
 app = FastAPI(
@@ -42,5 +41,6 @@ app.include_router(router)
 
 @app.get("/health")
 async def health():
+    """Health check endpoint"""
     logger.info("Health check endpoint called")
     return {"status": "ok", "service": "MediRoute AI"}

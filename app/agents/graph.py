@@ -1,11 +1,11 @@
 """MediRoute AI - LangGraph Graph Definition"""
 from langgraph.graph import StateGraph, START, END
 
-from agents.state import AgentState
-from agents.nodes.orchestrator_agent import orchestrator_agent_node
-from agents.nodes.intake_agent import intake_agent_node
-from agents.nodes.match_agent import match_agent_node
-from agents.nodes.response_agent import response_agent_node
+from app.agents.state import AgentState
+from app.agents.nodes.orchestrator_agent import orchestrator_agent_node
+from app.agents.nodes.intake_agent import intake_agent_node
+from app.agents.nodes.match_agent import match_agent_node
+from app.agents.nodes.response_agent import response_agent_node
 
 
 async def _get_routing_decision(state: AgentState) -> str:

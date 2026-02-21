@@ -2,12 +2,12 @@
 import logging
 import json
 
-from agents.state import AgentState
 from langchain_core.messages import AIMessage
 
-from agents.prompts import orchestrator_agent_prompts as oa_prompts
-from agents.tools import orchestrator_agent_tools as oa_tools
-from utils.llm_util import call_llm
+from app.agents.state import AgentState
+from app.agents.prompts import orchestrator_agent_prompts as oa_prompts
+from app.agents.tools import orchestrator_agent_tools as oa_tools
+from app.utils.llm_util import call_llm
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ async def orchestrator_agent_node(state: AgentState) -> AgentState:
     logger.info("="*30)
 
     past_messages = state["messages"]
-    
+
     # Build messages for LLM call
     messages = [
         {"role": "system", "content": oa_prompts.ORCHESTRATOR_AGENT_PROMPT}
@@ -32,7 +32,7 @@ async def orchestrator_agent_node(state: AgentState) -> AgentState:
         content = msg.content
         messages.append({"role": role, "content": content})
 
-    logger.info(f"Calling LLM with messages: {json.dumps(messages, indent=2)}")
+    logger.info("Calling LLM with messages: %s", json.dumps(messages, indent=2))
 
     response = await call_llm(
         messages=messages,
@@ -40,7 +40,7 @@ async def orchestrator_agent_node(state: AgentState) -> AgentState:
         tool_choice="auto",
     )
 
-    logger.info(f"LLM response: {response}")
+    logger.info("LLM response: \n%s", response)
 
     choice = response.choices[0]
     message = choice.message
@@ -51,13 +51,13 @@ async def orchestrator_agent_node(state: AgentState) -> AgentState:
         tool_name = tool_call.function.name
         args = json.loads(tool_call.function.arguments)
 
-        logger.info(f"Tool called: {tool_name} | Args: {args}")
+        logger.info("Tool called: %s | Args: %s", tool_name, args)
 
         if tool_name == "call_intake_agent":
             query = args["query"]
             purpose = args["purpose"]
 
-            logger.info(f"Routing to intake_agent — Purpose: {purpose}")
+            logger.info("Routing to intake_agent — Purpose: %s", purpose)
 
             return {
                 "messages": [AIMessage(content=query, name="orchestrator_agent")],
@@ -67,7 +67,7 @@ async def orchestrator_agent_node(state: AgentState) -> AgentState:
     # Direct response
     direct_response = message.content or ""
 
-    logger.info(f"Direct response from orchestrator: {direct_response}")
+    logger.info("Direct response from LLM: %s", direct_response)
 
     return {
         "messages": [AIMessage(content=direct_response, name="orchestrator_agent")],

@@ -3,8 +3,8 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
-from models.chat_models import ChatRequest, ChatResponse
-from services.chat_service import chat_service
+from app.models.chat_models import ChatRequest, ChatResponse
+from app.services.chat_service import chat_service
 
 logger = logging.getLogger(__name__)
 
@@ -33,5 +33,5 @@ async def send_message(request: ChatRequest):
         )
 
     except Exception as e:
-        logger.error(f"Error processing message: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error("Error processing message: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e)) from e

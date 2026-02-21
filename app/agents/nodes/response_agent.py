@@ -2,11 +2,11 @@
 import logging
 import json
 
-from agents.state import AgentState
 from langchain_core.messages import AIMessage
 
-from agents.prompts import response_agent_prompts as ra_prompts
-from utils.llm_util import call_llm
+from app.agents.state import AgentState
+from app.agents.prompts import response_agent_prompts as ra_prompts
+from app.utils.llm_util import call_llm
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +25,11 @@ async def response_agent_node(state: AgentState) -> AgentState:
     try:
         match_data = json.loads(last_message.content)
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse match data: {e}")
+        logger.error("Failed to parse match data: %s", e)
         return {
             "messages": [AIMessage(
-                content="I'm sorry, I encountered an issue finding hospitals. Please call 911 immediately for emergency assistance.",
+                content=("I'm sorry, I encountered an issue finding hospitals. "
+                         "Please call 911 immediately for emergency assistance."),
                 name="response_agent"
             )],
             "next_agent": "END"
@@ -80,7 +81,7 @@ Matched hospitals ranked by distance and capability:
 Please deliver the hospital recommendation to the patient in a warm, empathetic, and clear way.
 """
 
-    logger.info(f"Sending to LLM:\n{user_content}")
+    logger.info("Calling LLM with user content: %s", user_content)
 
     messages = [
         {"role": "system", "content": ra_prompts.RESPONSE_AGENT_PROMPT},
@@ -93,12 +94,13 @@ Please deliver the hospital recommendation to the patient in a warm, empathetic,
 
     try:
         message = response.choices[0].message
-        final_response = message.content or "I'm sorry, something went wrong. Please call 911 immediately."
+        final_response = (message.content or
+                          "I'm sorry, something went wrong. Please call 911 immediately.")
     except (AttributeError, IndexError):
         logger.error("Malformed LLM response structure.")
         final_response = "I'm sorry, something went wrong. Please call 911 immediately."
 
-    logger.info(f"Response agent output: {final_response}")
+    logger.info("LLM Response: %s", final_response)
 
     return {
         "messages": [

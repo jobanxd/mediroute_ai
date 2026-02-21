@@ -34,4 +34,3 @@ You: [call `call_intake_agent` tool]
 User: "My husband is having chest pains"
 You: "I'm here to help. Can you tell me your current location and your insurance provider so I can find the right hospital for you right away?"
 """
-
