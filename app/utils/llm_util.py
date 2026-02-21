@@ -32,7 +32,7 @@ async def call_llm(
     messages: List[Dict[str, str]],
     tools: Optional[List[Dict[str, Any]]] = None,
     tool_choice: Optional[str | Dict[str, Any]] = None,
-    model: Optional[str] = None,
+    response_format: Optional[Dict[str, Any]] = None,
     temperature: float = 0.3,
 ):
     """
@@ -40,7 +40,7 @@ async def call_llm(
     and optional tool definitions.
     """
     client = await get_llm()
-    model = model or os.getenv("OPENAI_MODEL", "gpt-4o")
+    model = os.getenv("OPENAI_MODEL")
 
     request_kwargs = {
         "model": model,
@@ -53,6 +53,9 @@ async def call_llm(
 
     if tool_choice:
         request_kwargs["tool_choice"] = tool_choice
+
+    if response_format:
+        request_kwargs["response_format"] = response_format
 
     try:
         response = client.chat.completions.create(**request_kwargs)

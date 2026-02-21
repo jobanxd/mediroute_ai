@@ -35,6 +35,27 @@ async def intake_agent_node(state: AgentState) -> AgentState:
 
     response = await call_llm(
         messages=messages,
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": "intake_response",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "symptoms": {"type": "string"},
+                        "emergency_type": {"type": "string"},
+                        "location": {"type": "string"},
+                        "insurance_provider": {"type": "string"},
+                    },
+                    "required": [
+                        "symptoms",
+                        "emergency_type",
+                        "location",
+                        "insurance_provider",
+                    ],
+                },
+            },
+        }
     )
 
     logger.info("LLM response: \n%s", response)

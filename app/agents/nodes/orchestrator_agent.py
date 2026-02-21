@@ -67,7 +67,7 @@ async def orchestrator_agent_node(state: AgentState) -> AgentState:
     # Direct response
     direct_response = message.content or ""
 
-    logger.info("Direct response from LLM: %s", direct_response)
+    logger.info("Direct response from LLM: \n%s", direct_response)
 
     return {
         "messages": [AIMessage(content=direct_response, name="orchestrator_agent")],
